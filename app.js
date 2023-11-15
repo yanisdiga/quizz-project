@@ -23,45 +23,7 @@ const questionList = {
         }
     ]
 };
-
 const container = document.querySelector('.container');
-// Initialise les questions et les affiches dans le conteneur
-function initializeQuestions() {
-    questionList.liste.forEach((item, index) => {
-        const questionDiv = document.createElement('div');
-        questionDiv.className = 'question';
-
-        const logoDiv = document.createElement('div');
-        logoDiv.className = 'logo';
-        logoDiv.id = index + 1;
-        if (item.level == 1) logoDiv.innerText = '🥉';
-        else if (item.level == 2) logoDiv.innerText = '🥈';
-        else logoDiv.innerText = '🥇';
-
-        const questionTextDiv = document.createElement('div');
-        questionTextDiv.className = 'question-text';
-        const questionTitle = document.createElement('h1');
-        questionTitle.innerText = item.question;
-
-        const answerDiv = document.createElement('div');
-        answerDiv.className = 'question-answer';
-        answerDiv.id = index + 1;
-        const answerParagraph = document.createElement('p');
-        answerParagraph.innerText = item.answer;
-
-        // Assemble les éléments
-        questionTextDiv.appendChild(questionTitle);
-        answerDiv.appendChild(answerParagraph);
-        questionDiv.appendChild(logoDiv);
-        questionDiv.appendChild(questionTextDiv);
-        questionDiv.appendChild(answerDiv);
-
-        // Ajoute la question au conteneur
-        container.appendChild(questionDiv);
-    });
-}
-initializeQuestions();
-
 
 // Recupération des éléments
 const questions = document.querySelectorAll('.question');
@@ -69,20 +31,61 @@ const logos = document.querySelectorAll('.logo');
 const answers = document.querySelectorAll('.question-answer');
 
 // Affiche la réponse correspondante à la question lors du clique sur le logo
-function printAnswer() {
-    questions.forEach((question) => {
-        logos.forEach((logo) => {
-            logo.addEventListener('click', () => {
-                const id = logo.id;
-                answers.forEach((answer) => {
-                    if (answer.id == id) {
-                        answer.style.display = 'flex';
-                    } else {
-                        answer.style.display = 'none';
-                    }
-                });
-            });
-        });
+function printAnswer(id) {
+    const allAnswers = document.querySelectorAll('.question-answer');
+    // Masque toutes les réponses
+    allAnswers.forEach((answer) => {
+        answer.style.display = 'none';
+    });
+    // Affiche la réponse correspondante
+    const answerParagraph = document.querySelector(`[data-index="answer-${id}"]`);
+    answerParagraph.innerText = questionList.liste[id - 1].answer;
+    answerParagraph.style.display = 'flex';
+}
+
+function displayQuestions(item, i) {
+    const questionDiv = document.createElement('div');
+    questionDiv.className = 'question';
+    const logoDiv = document.createElement('div');
+    logoDiv.className = 'logo';
+    logoDiv.id = i + 1;
+    logoDiv.addEventListener('click', function(event) {
+        const id = logoDiv.id;
+        printAnswer(id);
+    });
+    if (item.level == 1) logoDiv.innerText = '🥉';
+    else if (item.level == 2) logoDiv.innerText = '🥈';
+    else logoDiv.innerText = '🥇';
+    const questionTextDiv = document.createElement('div');
+    questionTextDiv.className = 'question-text';
+    const questionTitle = document.createElement('h1');
+    questionTitle.innerText = item.question;
+    const answerDiv = document.createElement('div');
+    answerDiv.className = 'question-answer';
+    answerDiv.dataset.index = `answer-${i + 1}`;
+    const answerParagraph = document.createElement('p');
+    questionTextDiv.appendChild(questionTitle);
+    answerDiv.appendChild(answerParagraph);
+    questionDiv.appendChild(logoDiv);
+    questionDiv.appendChild(questionTextDiv);
+    questionDiv.appendChild(answerDiv);
+    container.appendChild(questionDiv);
+}
+
+function getVal() {
+    const input = document.querySelector('.search-input').value.toLowerCase();
+    container.innerHTML = '';
+    questionList.liste.filter((item, i) => {
+        if (item.question.toLowerCase().includes(input)) {
+            displayQuestions(item, i);
+        }
+    })
+}
+
+// Initialise les questions et les affiches dans le conteneur
+function initializeQuestions() {
+    questionList.liste.forEach((item, index) => {
+        displayQuestions(item, index);
     });
 }
-printAnswer();
+initializeQuestions();
