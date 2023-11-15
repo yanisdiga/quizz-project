@@ -40,6 +40,8 @@ function printAnswer(id) {
     const answerParagraph = document.querySelector(`[data-index="answer-${id}"]`);
     answerParagraph.innerText = questionList.liste[id - 1].answer;
     answerParagraph.style.display = 'flex';
+    // Empêche la propagation de l'événement click pour éviter que document.body ne le capte
+    event.stopPropagation();
 }
 // Affiche les questions
 function displayQuestions(item, i) {
@@ -86,6 +88,14 @@ function initializeQuestions() {
     });
 }
 
+// Supprime les réponses lors du clique sur le body
+document.body.addEventListener('click', function() {
+    const allAnswers = document.querySelectorAll('.question-answer');
+    // Masque toutes les réponses
+    allAnswers.forEach((answer) => {
+        answer.style.display = 'none';
+    });
+});
 
 // Initialise les quesitons lors du chargement de la page
 addEventListener('DOMContentLoaded', () => {
