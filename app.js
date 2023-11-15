@@ -3,29 +3,28 @@ const questionList = {
     "liste": [
         {
             "question": "Qu'est-ce que JSON?",
-            "level": 3,
+            "level": "🥇",
             "answer": "JSON (JavaScript Object Notation) est un format léger d'échange de données."
         },
         {
             "question": "Comment déclarer une variable en JavaScript?",
-            "level": 2,
+            "level": "🥈",
             "answer": "Utilisez 'var', 'let', ou 'const' suivi du nom de la variable."
         },
         {
             "question": "Quelle est la capitale de la France?",
-            "level": 1,
+            "level": "🥉",
             "answer": "La capitale de la France est Paris."
         },
         {
             "question": "Quelle est la capitale de la Belgique?",
-            "level": 1,
+            "level": "🥉",
             "answer": "Bruxelles."
         }
     ]
 };
-const container = document.querySelector('.container');
-
 // Recupération des éléments
+const container = document.querySelector('.container');
 const questions = document.querySelectorAll('.question');
 const logos = document.querySelectorAll('.logo');
 const answers = document.querySelectorAll('.question-answer');
@@ -42,7 +41,7 @@ function printAnswer(id) {
     answerParagraph.innerText = questionList.liste[id - 1].answer;
     answerParagraph.style.display = 'flex';
 }
-
+// Affiche les questions
 function displayQuestions(item, i) {
     const questionDiv = document.createElement('div');
     questionDiv.className = 'question';
@@ -53,9 +52,7 @@ function displayQuestions(item, i) {
         const id = logoDiv.id;
         printAnswer(id);
     });
-    if (item.level == 1) logoDiv.innerText = '🥉';
-    else if (item.level == 2) logoDiv.innerText = '🥈';
-    else logoDiv.innerText = '🥇';
+    logoDiv.innerText = item.level;
     const questionTextDiv = document.createElement('div');
     questionTextDiv.className = 'question-text';
     const questionTitle = document.createElement('h1');
@@ -71,12 +68,12 @@ function displayQuestions(item, i) {
     questionDiv.appendChild(answerDiv);
     container.appendChild(questionDiv);
 }
-
+// Fonction gérant la recherche
 function getVal() {
     const input = document.querySelector('.search-input').value.toLowerCase();
     container.innerHTML = '';
     questionList.liste.filter((item, i) => {
-        if (item.question.toLowerCase().includes(input)) {
+        if (item.question.toLowerCase().includes(input) || item.level.toLowerCase().includes(input)) {
             displayQuestions(item, i);
         }
     })
@@ -88,4 +85,9 @@ function initializeQuestions() {
         displayQuestions(item, index);
     });
 }
-initializeQuestions();
+
+
+// Initialise les quesitons lors du chargement de la page
+addEventListener('DOMContentLoaded', () => {
+    initializeQuestions();
+})
