@@ -32,17 +32,18 @@ const answers = document.querySelectorAll('.question-answer');
 // Affiche la réponse correspondante à la question lors du clique sur le logo
 function printAnswer(id) {
     const allAnswers = document.querySelectorAll('.question-answer');
+    const answerParagraph = document.querySelector(`[data-index="answer-${id}"]`);
     // Masque toutes les réponses
     allAnswers.forEach((answer) => {
         answer.style.display = 'none';
     });
     // Affiche la réponse correspondante
-    const answerParagraph = document.querySelector(`[data-index="answer-${id}"]`);
     answerParagraph.innerText = questionList.liste[id - 1].answer;
     answerParagraph.style.display = 'flex';
     // Empêche la propagation de l'événement click pour éviter que document.body ne le capte
     event.stopPropagation();
 }
+
 // Affiche les questions
 function displayQuestions(item, i) {
     const questionDiv = document.createElement('div');
@@ -50,10 +51,7 @@ function displayQuestions(item, i) {
     const logoDiv = document.createElement('div');
     logoDiv.className = 'logo';
     logoDiv.id = i + 1;
-    logoDiv.addEventListener('click', function(event) {
-        const id = logoDiv.id;
-        printAnswer(id);
-    });
+    logoDiv.addEventListener('click', () => {const id = logoDiv.id; printAnswer(id)});
     logoDiv.innerText = item.level;
     const questionTextDiv = document.createElement('div');
     questionTextDiv.className = 'question-text';
@@ -70,8 +68,9 @@ function displayQuestions(item, i) {
     questionDiv.appendChild(answerDiv);
     container.appendChild(questionDiv);
 }
+
 // Fonction gérant la recherche
-function getVal() {
+function getSearchValue() {
     const input = document.querySelector('.search-input').value.toLowerCase();
     container.innerHTML = '';
     questionList.liste.filter((item, i) => {
@@ -83,7 +82,10 @@ function getVal() {
 
 // Initialise les questions et les affiches dans le conteneur
 function initializeQuestions() {
-    questionList.liste.forEach((item, index) => {
+    // Randomiser l'ordre des questions
+    const randomizeQuestions = questionList.liste.sort(() => Math.random() - 0.5);
+    // Afficher les questions dans le conteneur
+    randomizeQuestions.forEach((item, index) => {
         displayQuestions(item, index);
     });
 }
