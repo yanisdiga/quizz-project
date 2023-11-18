@@ -63,19 +63,22 @@ body {
     display: flex;
     flex-direction: column;
     width: 80vw;
-    height: 10vh;
+    min-height: 10vh;
     background-color: rgb(42, 80, 163);
     border-radius: 10px;
+    justify-content: center;
+    align-items: center;
 }
 
 .question .logo {
-    position: absolute;
+    position: relative;
     border-radius: 50%;
     background-color: #fff;
-    left: -1%;
-    transform: translateY(-50%);
     width: 50px;
     height: 50px;
+    left: -50%;
+    top: -50%;
+    transform: translateY(-50%);
     text-align: center;
     align-items: center;
     font-size: 2rem;
@@ -84,16 +87,23 @@ body {
 
 .question .question-text {
     display: flex;
+    position: relative;
     margin-left: 5%;
     justify-content: center;
     align-items: center;
+    font-size: auto;
+    text-size-adjust: auto;
+    top: -50%;
+    transform: translateY(-50%);
 }
 
 .question .question-answer {
     display: none;
+    position: relative;
     margin-left: 5%;
     justify-content: center;
     align-items: center;
+    transform: translateY(-50%);
 }
 
 .show-answer {
